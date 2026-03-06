@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+}
+
+model Order {
+  orderId      String   @id
+  value        Float
+  creationDate DateTime
+  items        Item[]
+}
+
+model Item {
+  id        Int    @id @default(autoincrement())
+  orderId   String
+  productId Int
+  quantity  Int
+  price     Float
+
+  order Order @relation(fields: [orderId], references: [orderId])
+}
